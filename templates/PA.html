@@ -1,0 +1,256 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% block cssblock %}
+<link rel="stylesheet" type="text/css" href="../static/css/ball.css">
+{% endblock %}
+
+{% block javascriptblock %}
+<script type="text/javascript">
+    // For converting python list object to JSON object...
+    // No need for running 2 for loops as done previously.
+    // global variable
+    var actGet = {{ activity_entered| tojson | safe }};
+</script>
+<script type="text/javascript" src="../static/javascript/pa.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock %}
+
+{% block titleblock %} 
+  <title>Physical Activity - Guard Your Heart</title>
+{% endblock %}
+
+<style>
+    .center1 {
+        margin: 0 auto;
+    }
+</style>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('assessment')}}">Assessment</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('results')}}">Results</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Physical Activity</li>
+    </ol>
+</nav>
+<!-- <div class="jumbotron jumbotron-fluid theme-box-light"> -->
+
+<!-- </div> -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1">
+            <div class="sidenav">
+                <a href="#heart" class="btn btn-warning my-2">Activities</a>
+                <a href="#feedbackContain" class="btn btn-warning my-2" id="feed">Feedback</a>
+                <a href="#sug" class="btn btn-warning my-2">Suggestions</a>
+            </div>
+        </div>
+        <div class="col-lg-11">
+            <div class="container-fluid">
+                <div class="container-md my-5 px-md-5">
+                    <div class="container mt-0 theme-box-light" style="border-radius: 10px;">
+                        <div class="row pt-5">
+                            <div id="heart"></div>
+                            <h1 class="display-4 theme-title1">Physical Activity</h1>
+                        </div>
+                        <div class="row" style="margin-left: 85px;">
+                            <p>Find out physical activity suggestions built for you below</p>
+                        </div>
+                    </div>
+
+
+                    <!-- show current activity -->
+                    <div class="container-fluid my-5 theme-box-light pb-5" style="border-radius: 10px;">
+                        <div class="container" id="current_pa">
+                            <h1 class="display-4 mb-3 theme-title1 mb-5 pt-5">Your Activities</h1>
+                            <!-- heading-row -->
+                            <div id="row_heading" class="table-responsive" style="display: none;">
+                                <table class="table col-sm-12" style="background-color: white; border-radius: 10px;">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Activity</th>
+                                            <th scope="col">Minutes per day</th>
+                                            <th scope="col">Days per week</th>
+                                            <th scope="col">Intensity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_pa">
+
+                                        <!-- <tr><th scope="row">2</th><td>Jacob</td><td>Thornton</td><td>@fat</td></tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- <div class="row mb-3 pb-5">
+                                <div id="light" class="col-sm-4">
+                                    <h4 class="theme-title1">Light activities:</h4>
+                                </div>
+                                <div id="moderate" class="col-sm-4">
+                                    <h4 class="theme-title1">Moderate activities:</h4>
+                                </div>
+                                <div id="vigorous" class="col-sm-4">
+                                    <h4 class="theme-title1">Vigorous activities:</h4>
+                                </div>
+                            </div> -->
+                            <div class="wrapper">
+                                <canvas id="myChart" style="display: none;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- give feedback -->
+                    <div class="container-fluid my-5 theme-box-light pb-5" id="feedbackContain"
+                        style="border-radius: 10px;">
+                        <div class="container" id="feedback">
+                            <h1 class="display-4 mb-3 theme-title1 mb-5 pt-5">Feedback</h1>
+
+                        </div>
+                    </div>
+
+                    <!-- show activities based on intensity -->
+                    <div class="container-fluid my-5 theme-box-light pb-5" id="sug" style="border-radius: 10px;">
+                        <div class="container">
+                            <h1 class="display-4 mb-3 theme-title1 mb-5 pt-5">Physical Activity Suggestions</h1>
+                            <div class="row">
+                                <button type="button" class="btn btn-warning mb-3 col-sm-3 mr-5 ml-5"
+                                    onclick="tableAjax(this)" id="myButton1">See
+                                    light activities here</button>
+
+                                <button type="button" class="btn btn-warning mb-3 col-sm-3 mr-5"
+                                    onclick="tableAjax(this)" id="myButton2">See
+                                    moderate
+                                    activities here</button>
+                                <button type="button" class="btn btn-warning mb-3 col-sm-3" onclick="tableAjax(this)"
+                                    id="myButton3">See
+                                    vigorous
+                                    activities here</button>
+                            </div>
+
+                            <div id="activityTable" style="display: none;">
+                                <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                                <br>
+                                <table class="table table-bordered table-striped"
+                                    style="background-color: white; border-radius: 10px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Heading</th>
+                                            <th>Activity</th>
+                                            <th>Intensity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="myTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="container-fluid theme-box-light" style="border-radius: 10px;">
+                        <div class="container-md my-5 py-5">
+                            <div class="row">
+                                <div class="col-6"><a href="{{ url_for('results')}}" class="btn btn-warning">Results</a>
+                                </div>
+                                <div class="col-6"><a href="{{ url_for('diet')}}" class="btn btn-warning"
+                                        style="float: right;">Diet</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+    });
+
+    // display table
+    function tableAjax(temp) {
+        var activityTable = document.getElementById("activityTable");
+        var style = activityTable.style;
+        $("#myTable > tr").remove();
+
+        var butId = temp.id;
+        var msg1 = "See light activities here";
+        var msg2 = "See moderate activities here";
+        var msg3 = "See vigorous activities here";
+        var msg4 = "Close the table";
+
+        if (temp.innerHTML != msg4) {
+            $("#myButton1").html(msg1);
+            $("#myButton2").html(msg2);
+            $("#myButton3").html(msg3);
+            temp.innerHTML = msg4;
+            activityTable.style = "";
+            callAjax(butId);
+        }
+        else {
+            $("#myButton1").html(msg1);
+            $("#myButton2").html(msg2);
+            $("#myButton3").html(msg3);
+            activityTable.style = "display: none";
+        }
+
+    }
+
+    // call Ajax
+    function callAjax(butId) {
+        $.ajax({
+            url: "{{ url_for('tableAjax') }}",
+            type: "post",
+            data: { "butId": butId },
+            async: false,
+            success: function (data) {
+                var result = JSON.parse(data)
+
+                for (var i = 0; i < result.length; i++) {
+                    var heading = result[i].heading;
+                    for (var j = 0; j < result[i].activities.length; j++) {
+                        var tr = document.createElement("tr");
+                        var td1 = document.createElement("td");
+                        var td2 = document.createElement("td");
+                        var td3 = document.createElement("td");
+
+                        td1.innerHTML = heading;
+                        td2.innerHTML = result[i].activities[j].activity;
+
+                        var intensity = result[i].activities[j].intensity;
+
+                        if (parseInt(intensity) == 1) {
+                            td3.innerHTML = "Light";
+                        }
+                        else if (parseInt(intensity) == 2) {
+                            td3.innerHTML = "Moderate";
+                        }
+                        else {
+                            td3.innerHTML = "Vigorous";
+                        }
+
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+
+                        var myTable = document.getElementById("myTable");
+                        myTable.appendChild(tr);
+
+                    }
+
+                }
+            },
+            error: function (e) {
+                alert("error");
+            }
+        })
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,229 @@
+{% extends "layout.html" %} 
+
+{% block cssblock %}
+<link rel="stylesheet" type="text/css" href="../static/css/progressbar.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %} 
+
+{% block titleblock %} 
+  <title>Diet - Guard Your Heart</title>
+{% endblock %}
+
+{% block content %}
+<style>
+    .center1 {
+        margin: 0 auto;
+    }
+
+    .drop1 {
+        margin-left: 10px;
+    }
+</style>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('assessment')}}">Assessment</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('results')}}">Results</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Diet</li>
+    </ol>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1">
+            <div class="sidenav">
+                <a href="#heart" class="btn btn-warning my-2">Indicators</a>
+                <a href="#heal" class="btn btn-warning my-2">Healthy Food</a>
+                <a href="#unheal" class="btn btn-warning my-2">Unhealthy Food</a>
+            </div>
+        </div>
+        <div class="col-lg-11">
+            <div class="container-fluid">
+                <div class="container-md my-5 px-md-5">
+                    <div class="container mt-0 theme-box-light" style="border-radius: 10px;">
+                        <div class="row pt-5">
+                            <div id="heart"></div>
+                            <h1 class="display-4 theme-title1">Diet</h1>
+                        </div>
+                        <div class="row" style="margin-left: 80px;">
+                            <p>Find out dietary suggestions for you below</p>
+                        </div>
+                    </div>
+                    <div class="container-fluid theme-box-light" id="indi" style="border-radius: 10px;">
+                        <div class="container-md my-5 py-5 px-md-5">
+                            <h1 class="display-4 pb-4 mb-5 theme-title1">
+                                Indicators
+                            </h1>
+                            <div class="row d-flex align-items-baseline flex-wrap">
+                                <div class="col-md-4 px-4">
+                                    <div class="d-flex flex-column text-right">
+                                        <h3>Cholesterol Level</h3>
+                                        <p>Causes blockage in arteries</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-4">
+                                    <div class="progress">
+                                        {% if data.indicator[0] == 0%}
+                                        <div class="progress-bar theme-box-color bar" style="width:0%"></div>
+                                        {% elif data.cholestrol <=2 %}
+                                        <div class="progress-bar theme-box-color bar" style="width:40%"></div>
+                                        {% else %}
+                                        <div class="progress-bar theme-box-color bar" style="width:100%"></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-4">
+                                    {% if data.indicator[0] == 0 %}
+                                    <i class="fas fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Unknown</p>
+                                    {% elif data.cholestrol <=2 %}
+                                    <i class="fa fa-check d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Under Control</p>
+                                    {% else %}
+                                    <i class="fas fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">High</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row d-flex align-items-baseline flex-wrap">
+                                <div class="col-md-4 px-4">
+                                    <div class="d-flex flex-column text-right">
+                                        <h3>Blood Sugar Level</h3>
+                                        <p>Causes weight gain</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-4">
+                                    <div class="progress">
+                                        {% if data.indicator[1] == 0 %}
+                                        <div class="progress-bar theme-box-color bar" style="width:0%"></div>
+                                        {% elif data.gluc <=2 %}
+                                        <div class="progress-bar theme-box-color bar" style="width:40%"></div>
+                                        {% else %}
+                                        <div class="progress-bar theme-box-color bar" style="width:100%"></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-4">
+                                    {% if data.indicator[1] == 0 %}
+                                    <i class="fas fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Unknown</p>
+                                    {% elif data.gluc <=2 %}
+                                    <i class="fa fa-check d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Under Control</p>
+                                    {% else %}
+                                    <i class="fas fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">High</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row d-flex align-items-baseline flex-wrap">
+                                <div class="col-md-4 px-4">
+                                    <div class="d-flex flex-column text-right">
+                                        <h3>Body Mass Index (BMI)</h3>
+                                        <p>High BMI increases CVD risk</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-4">
+                                    <div class="progress">
+                                        {% if data.bmi < 18.5 %}
+                                        <div class="progress-bar theme-box-color bar" style="width:15%"></div>
+                                        {% elif data.bmi < 24.9 %}
+                                        <div class="progress-bar theme-box-color bar" style="width:35%"></div>
+                                        {% elif data.bmi < 29.9 %}
+                                        <div class="progress-bar theme-box-color bar" style="width:60%"></div>
+                                        {% else %}
+                                        <div class="progress-bar theme-box-color bar" style="width:90%"></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-4">
+                                    {% if data.bmi< 18.5 %}
+                                    <i class="fa fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Under Weight</p>
+                                    {% elif data.bmi< 24.9 %}
+                                    <i class="fa fa-check d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Normal Weight</p>
+                                    {% elif data.bmi < 29.9 %}
+                                    <i class="fa fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Overweight</p>
+                                    {% else %}
+                                    <i class="fa fa-exclamation-circle d-inline pr-2" style="font-size:32px;"></i>
+                                    <p class="lead d-inline">Obese</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid theme-box-light" style="border-radius: 10px;">
+                        <div class="container theme-box-light" style="border-radius: 20px;" id="heal">
+                            <h1 class="display-4 theme-title1 pt-5">Healthy Food Choices</h1>
+                            <!-- Pics -->
+                            <!-- <div class="row"> -->
+                                <!-- item -->
+                                <!-- {% for item in data1.keys() %}
+                                <div class="col-md-2 pr-md-3 py-5 theme-box-light">
+                                    <img class="img-fluid mx-auto d-block" src="../static/images/{{ item }}.jpg">
+                                    <div class="text-center" style="background-color:lightgray;">{{ item }}</div>
+                                </div>
+                                {% endfor %}
+                            </div> -->
+                            <div class="d-flex flex-wrap">
+                                {% for item in data1.keys() %}
+                                <div class="theme-box-color theme-white mb-3 mr-3 rounded-lg" style="max-width: 150px; ">
+                                    <img class="img-fluid rounded-top" src="../static/images/{{ item }}.jpg">
+                                    <div class="p-2">                                        
+                                        <p class="m-0">{{ item }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid theme-box-light" style="border-radius: 10px;">
+                        <div class="container theme-box-light mt-5" style="border-radius: 20px;" id="unheal">
+                            <h1 class="display-4 theme-title1 pt-5 md-2">Unhealthy Food Choices</h1>
+                            <!-- Pics -->
+                            <!-- <div class="row"> -->
+                                <!-- item -->
+                                <!-- {% for item in data2.keys() %}
+                                <div class="col-md-2 pr-md-3 py-5 theme-box-light">
+                                    <img class="img-fluid mx-auto d-block" src="../static/images/{{ item }}.jpg">
+                                    <div class="text-center" style="background-color:lightgray;">{{ item }}</div>
+                                </div>
+                                {% endfor %}
+                            </div> -->
+                            <div class="d-flex flex-wrap">
+                                {% for item in data2.keys() %}
+                                <div class="theme-box-color theme-white mb-3 mr-3 rounded-lg" style="max-width: 150px; ">
+                                    <img class="img-fluid rounded-top" src="../static/images/{{ item }}.jpg">
+                                    <div class="p-2">                                        
+                                        <p class="m-0">{{ item }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-md my-5 py-5 theme-box-light" style="border-radius: 10px;">
+                        <div class="row">
+                            <div class="col-6">
+                                <a href="{{ url_for('results')}}" class="btn btn-warning">Results</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ url_for('PA')}}" class="btn btn-warning" style="float: right;">Physical
+                                    Activity</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

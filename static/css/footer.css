@@ -1,0 +1,44 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.page-wrap {
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -121.33px; 
+}
+
+@media only screen and (min-width: 576px){
+    .page-wrap {
+        min-height: 100%;
+        /* equal to footer height */
+        margin-bottom: -136px; 
+    }
+}
+@media only screen and (min-width: 768px){
+    .page-wrap {
+        min-height: 100%;
+        /* equal to footer height */
+        margin-bottom: -145.33px; 
+    }
+}
+
+
+.page-wrap:after {
+    content: "";
+    display: block;
+}
+
+.site-footer, .page-wrap:after {
+    height: 121.33px; 
+}
+@media only screen and (min-width: 576px){
+    .site-footer, .page-wrap:after {
+        height: 136px; 
+    }
+}
+@media only screen and (min-width: 768px){
+    .site-footer, .page-wrap:after {
+        height: 145.33px; 
+    }
+}
